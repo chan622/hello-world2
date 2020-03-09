@@ -1,11 +1,37 @@
 from itertools import combinations, permutations
 import time
 import pandas as pd
+import numpy as np
 
 ### Generate all poker cards
 all_suits = ['club','diamond','heart','spade']
 all_ranks = [str(i) for i in range(2,11)] + ['J','Q','K','A']
 pokers = [i+'-'+j for i in all_suits for j in all_ranks]
+
+#### Solution 2: Statistical solution
+tStart = time.time()
+N = 100000
+k = 5
+count = 0 ## To count if consecutive suits occur
+found = False
+
+for i in range(N):
+    hand = np.random.choice(pokers, k, replace=False)
+    suits = []
+    for card in hand:
+        s, _ = card.split('-')
+        suits.append(s)
+
+    for i in range(k-1):
+        if suits[i]==suits[i+1]:
+            count += 1
+            break
+
+print(str((N-count)/N*100)+ '%')
+
+tEnd = time.time()
+print("The program costs", (tEnd-tStart), "sec")
+
 
 #### Question 2
 # #### Solution 1 : Memory Error
@@ -34,17 +60,3 @@ pokers = [i+'-'+j for i in all_suits for j in all_ranks]
 # tEnd = time.time()
 # print("The program costs", (tEnd-tStart), "sec")
 # ####
-
-#### Solution 2
-tStart = time.time()
-
-num_of_all_permutation = 52*51*50*49*48
-
-suits = []
-for card in pokers:
-    s, _ = card.split('-')
-    suits.append(s)
-
-
-tEnd = time.time()
-print("The program costs", (tEnd-tStart), "sec")
